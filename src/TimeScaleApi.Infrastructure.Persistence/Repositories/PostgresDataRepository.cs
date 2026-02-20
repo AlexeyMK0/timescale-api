@@ -6,7 +6,7 @@ using TimeScaleApi.Domain;
 using TimeScaleApi.Infrastructure.Persistence.DbContextModel;
 using TimeScaleApi.Infrastructure.Persistence.Mapping;
 
-namespace TimeScaleApi.Infrastructure.Persistence;
+namespace TimeScaleApi.Infrastructure.Persistence.Repositories;
 
 public sealed class PostgresDataRepository : IDataRecordsRepository
 {

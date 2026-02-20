@@ -6,7 +6,7 @@ using TimeScaleApi.Infrastructure.Persistence.DbContextModel;
 using TimeScaleApi.Infrastructure.Persistence.Entities;
 using TimeScaleApi.Infrastructure.Persistence.Mapping;
 
-namespace TimeScaleApi.Infrastructure.Persistence;
+namespace TimeScaleApi.Infrastructure.Persistence.Repositories;
 
 public class PostgresFileRecordsRepository : IFileRecordsRepository
 {

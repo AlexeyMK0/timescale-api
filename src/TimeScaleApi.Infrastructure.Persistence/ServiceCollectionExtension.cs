@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TimeScaleApi.Application.Abstractions.Repository;
+using TimeScaleApi.Infrastructure.Persistence.Repositories;
 
 namespace TimeScaleApi.Infrastructure.Persistence;
 

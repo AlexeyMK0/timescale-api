@@ -33,7 +33,7 @@ public class FileRecordService : IFileRecordService
         ILogger<FileRecordService> logger,
         IOptions<ServiceSettings> serviceSettings)
     {
-        const int defaultMaxDataRecordCount = 10000; 
+        const int defaultMaxDataRecordCount = 10000;
         const int defaultMinDataRecordCount = 1;
         DateTimeOffset defaultMinDateTime
             = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -45,6 +45,10 @@ public class FileRecordService : IFileRecordService
         _maxDataRecordCount = serviceSettings?.Value?.MaxDataRecordCount ?? defaultMaxDataRecordCount;
         _minDataRecordCount = serviceSettings?.Value?.MinDataRecordCount ?? defaultMinDataRecordCount;
         _minDateTime = defaultMinDateTime;
+        
+        _logger.LogDebug("Max data record count: {MaxDataRecordCount}", _maxDataRecordCount);
+        _logger.LogDebug("Min data record count: {MinDataRecordCount}", _minDataRecordCount);
+        _logger.LogDebug("Min DateTime : {MinDateTime}", _minDateTime);
     }
 
     public async Task<ImportFile.Response> ImportFile(ImportFile.Request request, CancellationToken cancellationToken)
@@ -63,8 +67,7 @@ public class FileRecordService : IFileRecordService
             new FileRecordBuilder(_minDateTime, _maxDataRecordCount, _minDataRecordCount, _medianCalculator);
         builder.WithName(request.FileName);
 
-        // TODO: add transaction entity 
-        await _persistenceContext.BeginTransactionAsync(cancellationToken);
+        using var transaction = await _persistenceContext.BeginTransactionAsync(cancellationToken);
 
         ArgumentNullException.ThrowIfNull(_persistenceContext.DataRecordsRepository);
         ArgumentNullException.ThrowIfNull(_persistenceContext.FileRecordsRepository);
@@ -89,7 +92,6 @@ public class FileRecordService : IFileRecordService
                 string? error = builder.AddDataRecord(dataRecord);
                 if (error is not null)
                 {
-                    await _persistenceContext.RollbackTransactionAsync(cancellationToken);
                     return new ImportFile.Response.Failure(error);
                 }
             }
@@ -97,7 +99,6 @@ public class FileRecordService : IFileRecordService
             IFileRecordBuilder.BuildResult buildResult = builder.Build();
             if (buildResult is IFileRecordBuilder.BuildResult.Failure buildFailure)
             {
-                await _persistenceContext.RollbackTransactionAsync(cancellationToken);
                 return new ImportFile.Response.Failure(buildFailure.Message);
             }
 
@@ -106,13 +107,13 @@ public class FileRecordService : IFileRecordService
             _persistenceContext.FileRecordsRepository.Save(result);
 
             await _persistenceContext.SaveChangesAsync(cancellationToken);
-            await _persistenceContext.CommitTransactionAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
             return new ImportFile.Response.Success(result.MapToDto());
         }
         catch (Exception e)
         {
             _logger.LogError("Unknown error: {}", e.Message);
-            await _persistenceContext.RollbackTransactionAsync(cancellationToken);
+            await transaction.RollbackAsync(cancellationToken);
             return new ImportFile.Response.Failure(e.Message);
         }
     }

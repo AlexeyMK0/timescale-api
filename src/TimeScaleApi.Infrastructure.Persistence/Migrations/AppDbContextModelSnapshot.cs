@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TimeScaleApi.Infrastructure.Persistence;
 using TimeScaleApi.Infrastructure.Persistence.DbContextModel;
 
 #nullable disable
@@ -44,6 +43,10 @@ namespace TimeScaleApi.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Date");
+
+                    b.HasIndex("FileName");
+
                     b.ToTable("Values");
                 });
 
@@ -74,6 +77,8 @@ namespace TimeScaleApi.Infrastructure.Persistence.Migrations
                         .HasColumnType("double precision");
 
                     b.HasKey("Name");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("Results");
                 });

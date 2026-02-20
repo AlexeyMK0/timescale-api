@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TimeScaleApi.Infrastructure.Persistence;
 using TimeScaleApi.Infrastructure.Persistence.DbContextModel;
 
 #nullable disable
@@ -13,7 +12,7 @@ using TimeScaleApi.Infrastructure.Persistence.DbContextModel;
 namespace TimeScaleApi.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260219143102_InitMigration")]
+    [Migration("20260220171655_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
@@ -32,7 +31,7 @@ namespace TimeScaleApi.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTimeOffset>("Date")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("ExecutionTime")
@@ -46,6 +45,10 @@ namespace TimeScaleApi.Infrastructure.Persistence.Migrations
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Date");
+
+                    b.HasIndex("FileName");
 
                     b.ToTable("Values");
                 });
@@ -70,13 +73,15 @@ namespace TimeScaleApi.Infrastructure.Persistence.Migrations
                     b.Property<double>("MedianValue")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime>("MinStartDateTime")
+                    b.Property<DateTimeOffset>("MinStartDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("MinValue")
                         .HasColumnType("double precision");
 
                     b.HasKey("Name");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("Results");
                 });

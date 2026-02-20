@@ -10,15 +10,22 @@ public class CsvParser : ICsvParser
 {
     private readonly string _parseFormat;
 
+    private readonly bool _skipHeader; 
+    
     public CsvParser(IOptions<ParserSettings> options)
     {
         const string defaultParseFormat = "yyyy-MM-ddThh:mm:ss.ffff'Z'";
         _parseFormat = options?.Value?.DateFormat ?? defaultParseFormat;
+        _skipHeader = options?.Value?.SkipHeader ?? false;
     }
 
     public ParseResult ParseFile(Stream stream, string fileName)
     {
         using var reader = new StreamReader(stream);
+        if (_skipHeader)
+        {
+            reader.ReadLine();
+        }
         int currentIndex = 0;
         var records = new List<DataRecord>();
         string? line;

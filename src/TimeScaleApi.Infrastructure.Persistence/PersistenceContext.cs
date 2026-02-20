@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore.Storage;
 using TimeScaleApi.Application.Abstractions.Repository;
 using TimeScaleApi.Infrastructure.Persistence.DbContextModel;
+using TimeScaleApi.Infrastructure.Persistence.Repositories;
 
 namespace TimeScaleApi.Infrastructure.Persistence;
 
@@ -20,19 +22,10 @@ public class PersistenceContext : IPersistenceContext
         _context = context;
     }
 
-    public async Task BeginTransactionAsync(CancellationToken cancellationToken)
+    public async Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken)
     {
-        await _context.Database.BeginTransactionAsync(cancellationToken);
-    }
-
-    public async Task CommitTransactionAsync(CancellationToken cancellationToken)
-    {
-        await _context.Database.CommitTransactionAsync(cancellationToken);
-    }
-
-    public async Task RollbackTransactionAsync(CancellationToken cancellationToken)
-    {
-        await _context.Database.RollbackTransactionAsync(cancellationToken);
+        IDbContextTransaction transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        return new PostgresTransaction(transaction);
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)

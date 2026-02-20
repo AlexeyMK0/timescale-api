@@ -11,7 +11,7 @@ using TimeScaleApi.Presentation.Http;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddApplication()
+    .AddApplication(builder.Configuration)
     .AddInfrastructureParsing(builder.Configuration)
     .AddInfrastructurePersistence()
     .AddDbContext<AppDbContext>(options => options.UseNpgsql(

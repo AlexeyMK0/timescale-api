@@ -17,7 +17,7 @@ namespace TimeScaleApi.Infrastructure.Persistence.Migrations
                 {
                     Name = table.Column<string>(type: "text", nullable: false),
                     DeltaTime = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    MinStartDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    MinStartDateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     AverageExecutionTime = table.Column<double>(type: "double precision", nullable: false),
                     AverageValue = table.Column<double>(type: "double precision", nullable: false),
                     MedianValue = table.Column<double>(type: "double precision", nullable: false),
@@ -35,7 +35,7 @@ namespace TimeScaleApi.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FileName = table.Column<string>(type: "text", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     ExecutionTime = table.Column<long>(type: "bigint", nullable: false),
                     Value = table.Column<double>(type: "double precision", nullable: false)
                 },
@@ -43,6 +43,21 @@ namespace TimeScaleApi.Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Values", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Results_Name",
+                table: "Results",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Values_Date",
+                table: "Values",
+                column: "Date");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Values_FileName",
+                table: "Values",
+                column: "FileName");
         }
 
         /// <inheritdoc />
