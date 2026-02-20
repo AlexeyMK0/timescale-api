@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using TimeScaleApi.Application.Abstractions;
+using Microsoft.Extensions.Options;
 using TimeScaleApi.Application.Abstractions.Parser;
 using TimeScaleApi.Domain;
 
@@ -9,7 +9,14 @@ namespace TimeScaleApi.Infrastructure.Parsing;
 public class CsvParser : ICsvParser
 {
     // private readonly string _parseFormat = "yyyy-MM-ddThh-mm-ss.ffff'Z'";
-    private readonly string _parseFormat = "yyyy-MM-ddThh:mm:ss.ffff'Z'";
+    private const string DefaultParseFormat = "yyyy-MM-ddThh:mm:ss.ffff'Z'";
+
+    private readonly string _parseFormat;
+    
+    public CsvParser(IOptions<ParserSettings>? options)
+    {
+        _parseFormat = options?.Value?.DateFormat ?? DefaultParseFormat;
+    }
 
     public ParseResult ParseFile(Stream stream, string fileName)
     {
@@ -27,8 +34,12 @@ public class CsvParser : ICsvParser
                     currentIndex, "CSV expected 3 columns, actual: " + columns.Length);
             }
 
-            if (!DateTimeOffset.TryParseExact(columns[0], _parseFormat, CultureInfo.InvariantCulture,
-                    DateTimeStyles.AssumeUniversal, out var date))
+            if (!DateTimeOffset.TryParseExact(
+                    columns[0],
+                    _parseFormat,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AssumeUniversal,
+                    out var date))
             {
                 return LineReadingError(currentIndex, "expected date at position 1, actual: " + columns[0]);
             }

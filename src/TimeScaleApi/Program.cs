@@ -12,7 +12,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddApplication()
-    .AddInfrastructureParsing()
+    .AddInfrastructureParsing(builder.Configuration)
     .AddInfrastructurePersistence()
     .AddDbContext<AppDbContext>(options => options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")))
