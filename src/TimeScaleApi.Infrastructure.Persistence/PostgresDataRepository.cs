@@ -19,25 +19,25 @@ public sealed class PostgresDataRepository : IDataRecordsRepository
         _logger = logger;
     }
 
-    public DataRecord Save(DataRecord record)
+    public void SaveRange(IEnumerable<DataRecord> records)
     {
-        return _context.Add(record.ToEntity()).Entity.ToDomain();
+        _context.Values.AddRange(records.Select(record => record.ToEntity()));
     }
-
-    public DataRecord[] Get(DataRecordQueryLatest queryLatest)
+    
+    public async Task<DataRecord[]> GetAsync(DataRecordQueryLatest queryLatest, CancellationToken token)
     {
-        return _context.Values.AsNoTracking()
+        return await _context.Values.AsNoTracking()
             .Where(d => d.FileName == queryLatest.FileName)
             .OrderByDescending(d => d.Date)
             .Take(queryLatest.LatestLimit)
             .Select(d => d.ToDomain())
-            .ToArray();
+            .ToArrayAsync(token);
     }
 
-    public void RemoveAllByFileName(string fileName)
+    public async Task RemoveAllByFileNameAsync(string fileName, CancellationToken cancellationToken)
     {
-        _context.Values
+        await _context.Values
             .Where(d => d.FileName == fileName)
-            .ExecuteDelete();
+            .ExecuteDeleteAsync();
     }
 }

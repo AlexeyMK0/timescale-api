@@ -1,4 +1,4 @@
-namespace TimeScaleApi.Infrastructure.Parsing;
+namespace TimeScaleApi.Infrastructure.Parsing.CsvParser;
 
 public class ParserSettings
 {

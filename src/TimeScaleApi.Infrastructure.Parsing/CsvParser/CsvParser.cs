@@ -3,19 +3,17 @@ using Microsoft.Extensions.Options;
 using TimeScaleApi.Application.Abstractions.Parser;
 using TimeScaleApi.Domain;
 
-namespace TimeScaleApi.Infrastructure.Parsing;
+namespace TimeScaleApi.Infrastructure.Parsing.CsvParser;
 
 // TODO: implement via CSV Helper
 public class CsvParser : ICsvParser
 {
-    // private readonly string _parseFormat = "yyyy-MM-ddThh-mm-ss.ffff'Z'";
-    private const string DefaultParseFormat = "yyyy-MM-ddThh:mm:ss.ffff'Z'";
-
     private readonly string _parseFormat;
-    
-    public CsvParser(IOptions<ParserSettings>? options)
+
+    public CsvParser(IOptions<ParserSettings> options)
     {
-        _parseFormat = options?.Value?.DateFormat ?? DefaultParseFormat;
+        const string defaultParseFormat = "yyyy-MM-ddThh:mm:ss.ffff'Z'";
+        _parseFormat = options?.Value?.DateFormat ?? defaultParseFormat;
     }
 
     public ParseResult ParseFile(Stream stream, string fileName)
@@ -41,7 +39,8 @@ public class CsvParser : ICsvParser
                     DateTimeStyles.AssumeUniversal,
                     out var date))
             {
-                return LineReadingError(currentIndex, "expected date at position 1, actual: " + columns[0]);
+                return LineReadingError(currentIndex,
+                    "expected date with format " + _parseFormat + " at position 1, actual: " + columns[0]);
             }
 
             if (!long.TryParse(columns[1], out var executionTime))

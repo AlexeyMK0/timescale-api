@@ -7,7 +7,7 @@ public interface IFileRecordsRepository
 {
     FileRecord Save(FileRecord record);
 
-    FileRecord[] Get(FileRecordQuery query);
+    Task<FileRecord[]> GetAsync(FileRecordQuery query, CancellationToken cancellationToken);
     
-    void RemoveAllByFileName(string fileName);
+    Task RemoveAllByFileNameAsync(string fileName, CancellationToken cancellationToken);
 }

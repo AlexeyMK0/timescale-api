@@ -40,9 +40,9 @@ public class PostgresFileRecordsRepository : IFileRecordsRepository
         return foundRecord.ToDomain();
     }
 
-    public FileRecord[] Get(FileRecordQuery query)
+    public async Task<FileRecord[]> GetAsync(FileRecordQuery query, CancellationToken cancellationToken)
     {
-        return _context.Results
+        return await _context.Results
             .AsNoTracking()
             .Where(r =>
                 (query.FileName == null || r.Name == query.FileName)
@@ -54,13 +54,13 @@ public class PostgresFileRecordsRepository : IFileRecordsRepository
                 && (query.MaxStartDateTime == null || r.MinStartDateTime <= query.MaxStartDateTime)
             )
             .Select(r => r.ToDomain())
-            .ToArray();
+            .ToArrayAsync(cancellationToken);
     }
 
-    public void RemoveAllByFileName(string fileName)
+    public async Task RemoveAllByFileNameAsync(string fileName, CancellationToken cancellationToken)
     {
-        _context.Results
+        await _context.Results
             .Where(r => r.Name == fileName)
-            .ExecuteDelete();
+            .ExecuteDeleteAsync(cancellationToken);
     }
 }

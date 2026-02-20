@@ -4,10 +4,10 @@ using TimeScaleApi.Domain;
 namespace TimeScaleApi.Application.Abstractions.Repository;
 
 public interface IDataRecordsRepository
-{
-    DataRecord Save(DataRecord record);
+{   
+    public void SaveRange(IEnumerable<DataRecord> records);
     
-    DataRecord[] Get(DataRecordQueryLatest queryLatest);
+    Task<DataRecord[]> GetAsync(DataRecordQueryLatest queryLatest, CancellationToken cancellationToken);
     
-    void RemoveAllByFileName(string fileName);
+    Task RemoveAllByFileNameAsync(string fileName, CancellationToken cancellationToken);
 }

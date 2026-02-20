@@ -16,7 +16,7 @@ builder.Services
     .AddInfrastructurePersistence()
     .AddDbContext<AppDbContext>(options => options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")))
-    .AddPresentationHttp();
+    .AddPresentationHttp(builder.Configuration);
 
 Console.Out.WriteLine("Default connection string: " + builder.Configuration.GetConnectionString("DefaultConnection"));
 

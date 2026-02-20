@@ -20,23 +20,23 @@ public class PersistenceContext : IPersistenceContext
         _context = context;
     }
 
-    public void BeginTransaction()
+    public async Task BeginTransactionAsync(CancellationToken cancellationToken)
     {
-        _context.Database.BeginTransaction();
+        await _context.Database.BeginTransactionAsync(cancellationToken);
     }
 
-    public void CommitTransaction()
+    public async Task CommitTransactionAsync(CancellationToken cancellationToken)
     {
-        _context.Database.CommitTransaction();
+        await _context.Database.CommitTransactionAsync(cancellationToken);
     }
 
-    public void RollbackTransaction()
+    public async Task RollbackTransactionAsync(CancellationToken cancellationToken)
     {
-        _context.Database.RollbackTransaction();
+        await _context.Database.RollbackTransactionAsync(cancellationToken);
     }
 
-    public int SaveChanges()
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return _context.SaveChanges();
+        return await _context.SaveChangesAsync(cancellationToken);
     }
 }

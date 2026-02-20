@@ -4,9 +4,9 @@ namespace TimeScaleApi.Application.Contracts.FileRecords;
 
 public interface IFileRecordService
 {   
-    ImportFile.Response ImportFile(ImportFile.Request request);
+    Task<ImportFile.Response> ImportFile(ImportFile.Request request, CancellationToken cancellationToken);
     
-    FindRecords.Response FindRecords(FindRecords.Request request);
+    Task<FindRecords.Response> FindRecords(FindRecords.Request request, CancellationToken cancellationToken);
     
-    GetRecent.Response GetByNameSortedByStartDate(GetRecent.Request request);
+    Task<GetRecent.Response> GetByNameSortedByStartDate(GetRecent.Request request, CancellationToken cancellationToken);
 }
