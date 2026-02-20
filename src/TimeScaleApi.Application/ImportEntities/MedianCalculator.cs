@@ -14,13 +14,18 @@ public class MedianCalculator : IMedianCalculator
     }
 
     public double FindMedianValue(IEnumerable<DataRecord> values)
-    {
+    {   
         var list = values.ToList();
+        if (list.Count is 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(values), $"{nameof(values)} must contain at least one value");
+        }
+
         list.Sort(new DataRecordValueComparer());
         double medianValue = list[list.Count / 2].Value;
         if (list.Count % 2 == 0)
         {
-            medianValue = medianValue + list[list.Count / 2 - 1].Value;
+            medianValue = (medianValue + list[list.Count / 2 - 1].Value) / 2;
         }
 
         return medianValue;

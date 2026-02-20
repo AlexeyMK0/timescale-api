@@ -5,7 +5,6 @@ using TimeScaleApi.Domain;
 
 namespace TimeScaleApi.Infrastructure.Parsing.CsvParser;
 
-// TODO: implement via CSV Helper
 public class CsvParser : ICsvParser
 {
     private readonly string _parseFormat;
@@ -16,7 +15,7 @@ public class CsvParser : ICsvParser
     {
         const string defaultParseFormat = "yyyy-MM-ddThh:mm:ss.ffff'Z'";
         _parseFormat = options?.Value?.DateFormat ?? defaultParseFormat;
-        _skipHeader = options?.Value?.SkipHeader ?? false;
+        _skipHeader = options?.Value?.SkipHeader ?? true;
     }
 
     public ParseResult ParseFile(Stream stream, string fileName)
@@ -65,14 +64,6 @@ public class CsvParser : ICsvParser
         }
 
         return new ParseResult.Success(records);
-        // var config = new CsvConfiguration(CultureInfo.CurrentCulture)
-        // {
-        //     NewLine = Environment.NewLine,
-        // };
-        // using (var csv = new CsvReader(new StreamReader(stream), config))
-        // {
-        //     var records = csv.GetRecords<DataRecord>();
-        // }
     }
 
     private ParseResult.Failure LineReadingError(int stringIndex, string reason)

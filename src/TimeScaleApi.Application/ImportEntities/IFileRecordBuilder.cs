@@ -7,8 +7,6 @@ public interface IFileRecordBuilder
     string? AddDataRecord(DataRecord dataRecord);
 
     BuildResult Build();
-
-    IFileRecordBuilder WithName(string name);
     
     public abstract record BuildResult
     {

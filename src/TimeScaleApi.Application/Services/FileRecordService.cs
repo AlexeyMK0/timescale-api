@@ -65,7 +65,6 @@ public class FileRecordService : IFileRecordService
 
         var builder =
             new FileRecordBuilder(_minDateTime, _maxDataRecordCount, _minDataRecordCount, _medianCalculator);
-        builder.WithName(request.FileName);
 
         using var transaction = await _persistenceContext.BeginTransactionAsync(cancellationToken);
 

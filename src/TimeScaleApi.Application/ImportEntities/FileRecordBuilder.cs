@@ -34,6 +34,11 @@ public class FileRecordBuilder : IFileRecordBuilder
             return AddingError("Maximum number of data records exceeded");
         }
 
+        if (_name is not null && _name != dataRecord.FileName)
+        {
+            return AddingError("Registered file name is " + _name + " got: " + dataRecord.FileName);
+        }
+        
         if (dataRecord.Date > DateTimeOffset.UtcNow)
         {
             return AddingError("Date is in the future");
@@ -58,12 +63,6 @@ public class FileRecordBuilder : IFileRecordBuilder
         
         _dataRecords.Add(dataRecord);
         return null;
-    }
-
-    public IFileRecordBuilder WithName(string name)
-    {
-        _name = name;
-        return this;
     }
 
     public IFileRecordBuilder.BuildResult Build()
@@ -95,6 +94,11 @@ public class FileRecordBuilder : IFileRecordBuilder
 
     private void UpdateMetrics(DataRecord dataRecord)
     {
+        if (_name is null)
+        {
+            _name = dataRecord.FileName;
+        }
+        
         if (dataRecord.Date < _minDate)
         {
             _minDate = dataRecord.Date;
