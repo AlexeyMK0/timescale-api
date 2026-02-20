@@ -4,8 +4,12 @@
     <Project Path="src\TimeScaleApi.Application.Contracts\TimeScaleApi.Application.Contracts.csproj" Type="Classic C#" />
     <Project Path="src\TimeScaleApi.Application\TimeScaleApi.Application.csproj" Type="Classic C#" />
     <Project Path="src\TimeScaleApi.Domain\TimeScaleApi.Domain.csproj" Type="Classic C#" />
+    <Project Path="src\TimeScaleApi.Infrastructure.Parsing\TimeScaleApi.Infrastructure.Parsing.csproj" Type="Classic C#" />
     <Project Path="src\TimeScaleApi.Infrastructure.Persistence\TimeScaleApi.Infrastructure.Persistence.csproj" Type="Classic C#" />
     <Project Path="src\TimeScaleApi.Presentation.Http\TimeScaleApi.Presentation.Http.csproj" Type="Classic C#" />
     <Project Path="src\TimeScaleApi\TimeScaleApi.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\TimeScaleAppiTests\TimeScaleAppiTests.csproj" Type="Classic C#" />
   </Folder>
 </Solution>

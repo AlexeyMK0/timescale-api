@@ -7,4 +7,34 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\TimeScaleApi.Application.Contracts\TimeScaleApi.Application.Contracts.csproj" />
+      <ProjectReference Include="..\TimeScaleApi.Application\TimeScaleApi.Application.csproj" />
+      <ProjectReference Include="..\TimeScaleApi.Infrastructure.Parsing\TimeScaleApi.Infrastructure.Parsing.csproj" />
+      <ProjectReference Include="..\TimeScaleApi.Infrastructure.Persistence\TimeScaleApi.Infrastructure.Persistence.csproj" />
+      <ProjectReference Include="..\TimeScaleApi.Presentation.Http\TimeScaleApi.Presentation.Http.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore">
+        <HintPath>..\..\..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\9.0.8\Microsoft.AspNetCore.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" />
+      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    
 </Project>
