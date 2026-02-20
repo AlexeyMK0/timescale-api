@@ -11,12 +11,10 @@ namespace TimeScaleApi.Infrastructure.Persistence.Repositories;
 public sealed class PostgresDataRepository : IDataRecordsRepository
 {
     private readonly AppDbContext _context;
-    private readonly ILogger<PostgresDataRepository> _logger;
 
-    public PostgresDataRepository(AppDbContext context, ILogger<PostgresDataRepository> logger)
+    public PostgresDataRepository(AppDbContext context)
     {
         _context = context;
-        _logger = logger;
     }
 
     public void SaveRange(IEnumerable<DataRecord> records)

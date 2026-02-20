@@ -29,8 +29,6 @@ public class FileRecordController : ControllerBase
         _fileRecordService = fileRecordService;
         _logger = logger;
         _defaultNumberOfRecords = options?.Value?.DefaultNumberOfRecords ?? numberOfRecordsByDefault;
-        
-        logger.LogInformation("Default number of records requested: " + _defaultNumberOfRecords);
     }
 
     [HttpPost]
@@ -59,6 +57,7 @@ public class FileRecordController : ControllerBase
         [FromQuery] FileRecordQueryDto queryDto,
         CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Getting file records");
         FindRecords.Request request = new FindRecords.Request(
             queryDto.FileName,
             queryDto.MinStartDateTime,
@@ -86,6 +85,7 @@ public class FileRecordController : ControllerBase
         CancellationToken cancellationToken
     )
     {
+        _logger.LogInformation("Getting recent file records");
         var request = new GetRecent.Request(numberOfRecords ?? _defaultNumberOfRecords, name);
 
         GetRecent.Response response = await _fileRecordService.GetByNameSortedByStartDate(request, cancellationToken);

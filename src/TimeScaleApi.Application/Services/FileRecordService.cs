@@ -45,10 +45,6 @@ public class FileRecordService : IFileRecordService
         _maxDataRecordCount = serviceSettings?.Value?.MaxDataRecordCount ?? defaultMaxDataRecordCount;
         _minDataRecordCount = serviceSettings?.Value?.MinDataRecordCount ?? defaultMinDataRecordCount;
         _minDateTime = defaultMinDateTime;
-        
-        _logger.LogDebug("Max data record count: {MaxDataRecordCount}", _maxDataRecordCount);
-        _logger.LogDebug("Min data record count: {MinDataRecordCount}", _minDataRecordCount);
-        _logger.LogDebug("Min DateTime : {MinDateTime}", _minDateTime);
     }
 
     public async Task<ImportFile.Response> ImportFile(ImportFile.Request request, CancellationToken cancellationToken)
@@ -78,13 +74,11 @@ public class FileRecordService : IFileRecordService
                 throw new InvalidOperationException("DataRecordsRepository is null");
             await _persistenceContext.DataRecordsRepository.RemoveAllByFileNameAsync(request.FileName,
                 cancellationToken);
-            _logger.LogInformation("Successfully removed data records by {}", request.FileName);
 
             if (_persistenceContext.FileRecordsRepository is null)
                 throw new InvalidOperationException("FileRecordsRepository is null");
             await _persistenceContext.FileRecordsRepository.RemoveAllByFileNameAsync(request.FileName,
                 cancellationToken);
-            _logger.LogInformation("Successfully removed file records by {}", request.FileName);
 
             foreach (DataRecord dataRecord in dataRecords)
             {
